@@ -36,16 +36,36 @@ if(isset($_GET['clear'])){
 }
 
 
-echo "<h2>Produkty:</h2>";
+echo '<h2 style="
+display: flex;
+
+border: 1px solid black;
+background: green;
+">Produkty:</h2>';
 foreach($products as $id => $product){
-    echo $product['name'] . ' - ' . $product['price'] . ' PLN ' .
-         '<a href="index.php?add='.$id.'">Dodaj do koszyka</a><br>';
+    echo'<section style="
+        display: flex;
+        padding: 1rem;
+       
+        ">'. $product['name'] . ' - ' . $product['price'] . ' PLN  ' .
+         '<a href="index.php?add='.$id.'"  
+        style="
+        display: flex;
+        margin:0 1rem;">Dodaj do koszyka</a></section><br>';
 }
 
-echo "<h2>Koszyk:</h2>";
+echo '<h2 
+style="
+display: flex;
+margin: 0rem 3rem;
+">Koszyk:</h2></br>';
 if (!empty($_SESSION['cart'])) {
     foreach($_SESSION['cart'] as $id => $qty){
-        echo $products[$id]['name'] . ' - ilość: ' . $qty . '<br>';
+        echo '<section style="
+        display: flex;
+        padding: 1rem;
+        border: 1px solid black;
+        ">' . $products[$id]['name']  . ' - ilość: ' . $qty .'</section> <br>';
     }
     echo '<a href="index.php?clear=1">Wyczyść koszyk</a>';
 } else {
