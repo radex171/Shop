@@ -4,9 +4,8 @@ session_start();
 
 
 if(!isset($_SESSION['cart'])){
-    $_SESSION['cart'] = [
+    $_SESSION['cart'] = [];
 
-    ];
 }
 $products = [
     ['name' => 'mleko', 'price' => 3.50],
@@ -17,7 +16,7 @@ $products = [
 
 
 
-
+$totalPrice = 0;
 
 if(isset($_GET['add'])){
   
@@ -31,10 +30,14 @@ if(isset($_GET['add'])){
     }
 }
 
+foreach($_SESSION['cart'] as $id => $qty){
+    $subtotal = $products[$id]['price'] * $qty;
+    $totalPrice += $subtotal;
+}
+
 if(isset($_GET['clear'])){
     $_SESSION['cart'] = [];
 }
-
 
 echo '<h2 style="
 display: flex;
@@ -42,6 +45,8 @@ display: flex;
 border: 1px solid black;
 background: green;
 ">Produkty:</h2>';
+
+
 foreach($products as $id => $product){
     echo'<section style="
         display: flex;
@@ -66,8 +71,18 @@ if (!empty($_SESSION['cart'])) {
         padding: 1rem;
         border: 1px solid black;
         ">' . $products[$id]['name']  . ' - ilość: ' . $qty .'</section> <br>';
+        
     }
     echo '<a href="index.php?clear=1">Wyczyść koszyk</a>';
 } else {
     echo "Brak produktów w koszyku.";
 }
+
+echo '<section  style="
+        display: flex;
+        padding: 1rem;
+        margin-top: 2rem;
+        border: 1px solid green;
+        background: green;
+        color: white;
+        "> Całkowita cena: ' . $totalPrice . ' zł';
