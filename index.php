@@ -7,6 +7,16 @@ if(!isset($_SESSION['cart'])){
     $_SESSION['cart'] = [];
 
 }
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $productId = (int) $_POST['product_id'];
+    $qty = max(1, (int) $_POST['qty']); 
+
+    if(isset($_SESSION['cart'][$productId])){
+        $_SESSION['cart'][$productId] += $qty;
+    } else {
+        $_SESSION['cart'][$productId] = $qty;
+    }
+}
 $products = [
     ['name' => 'mleko', 'price' => 3.50],
     ['name' => 'chleb', 'price' => 4.20],
@@ -18,17 +28,6 @@ $products = [
 
 $totalPrice = 0;
 
-if(isset($_GET['add'])){
-  
-    $productId = (int) $_GET['add']; 
-    if (isset($products[$productId])) { 
-       if(isset($_SESSION['cart'][$productId])){
-        $_SESSION['cart'][$productId]++;
-       } else {
-        $_SESSION['cart'][$productId] = 1;
-       }
-    }
-}
 
 foreach($_SESSION['cart'] as $id => $qty){
     $subtotal = $products[$id]['price'] * $qty;
@@ -53,10 +52,21 @@ foreach($products as $id => $product){
         padding: 1rem;
        
         ">'. $product['name'] . ' - ' . $product['price'] . ' PLN  ' .
-         '<a href="index.php?add='.$id.'"  
+      
+
+        '<form style="
+            display: flex;
+            margin: 0 2rem;"
+        method="POST">
+            <input type="number" name="qty">
+            <input type="hidden" name="product_id" value="'. (int) $id.'">
+              <button type="submit"
         style="
         display: flex;
-        margin:0 1rem;">Dodaj do koszyka</a></section><br>';
+        margin:0 1rem;">Dodaj do koszyka</button>
+        </form>
+         
+        </section><br>';
 }
 
 echo '<h2 
